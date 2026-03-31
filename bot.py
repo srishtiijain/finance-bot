@@ -131,7 +131,6 @@ STRICT RULES:
 def ask_gemini(user_message):
     try:
         model = genai.GenerativeModel(
-            model_name="gemini-pro",
 
             model_name="gemini-2.0-flash",
             system_instruction=SYSTEM_PROMPT
