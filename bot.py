@@ -4,33 +4,16 @@ SSL fix for Windows included
 """
 
 import os
+
 import json
-from flask import Flask        
-from threading import Thread   
-import telebot
+
 import logging
 import ssl
 import certifi
 import requests
 import google.generativeai as genai
 from dotenv import load_dotenv
-# --- KEEP ALIVE SERVER ---
-app = Flask('')
 
-@app.route('/')
-def home():
-    return "FinanceBot is running!"
-
-def run():
-    # Render automatically provides a PORT environment variable
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
-keep_alive()
 # Fix SSL on Windows BEFORE importing telebot
 os.environ['REQUESTS_CA_BUNDLE'] = certifi.where()
 os.environ['SSL_CERT_FILE'] = certifi.where()
@@ -148,6 +131,7 @@ STRICT RULES:
 def ask_gemini(user_message):
     try:
         model = genai.GenerativeModel(
+            model_name="gemini-pro",
 
             model_name="gemini-2.0-flash",
             system_instruction=SYSTEM_PROMPT
@@ -155,11 +139,9 @@ def ask_gemini(user_message):
         response = model.generate_content(user_message)
         return response.text
     except Exception as e:
-         logger.error(f"Gemini error TYPE: {type(e).__name__}")
-         logger.error(f"Gemini error FULL: {str(e)}")
-         import traceback
-         logger.error(f"Traceback: {traceback.format_exc()}")
-         return f"Debug error: {type(e).__name__}: {str(e)[:200]}"
+        logger.error(f"Gemini error: {e}")
+        return "Sorry, I ran into an issue. Please try again in a moment."
+
 
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -222,6 +204,7 @@ def handle_message(message):
     reply = ask_gemini(user_text)
     bot.reply_to(message, reply)
     logger.info(f"Replied to {user.first_name} [source: Gemini LLM]")
+=======
     reply = ask_gemini(user_text)
     bot.reply_to(message, reply)
     logger.info(f"Replied to {user.first_name}")
