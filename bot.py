@@ -204,7 +204,6 @@ def handle_message(message):
     reply = ask_gemini(user_text)
     bot.reply_to(message, reply)
     logger.info(f"Replied to {user.first_name} [source: Gemini LLM]")
-=======
     reply = ask_gemini(user_text)
     bot.reply_to(message, reply)
     logger.info(f"Replied to {user.first_name}")
