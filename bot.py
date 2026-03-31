@@ -155,9 +155,11 @@ def ask_gemini(user_message):
         response = model.generate_content(user_message)
         return response.text
     except Exception as e:
-        logger.error(f"Gemini error: {e}")
-        return "Sorry, I ran into an issue. Please try again in a moment."
-
+         logger.error(f"Gemini error TYPE: {type(e).__name__}")
+         logger.error(f"Gemini error FULL: {str(e)}")
+         import traceback
+         logger.error(f"Traceback: {traceback.format_exc()}")
+         return f"Debug error: {type(e).__name__}: {str(e)[:200]}"
 
 @bot.message_handler(commands=["start"])
 def start(message):
