@@ -224,14 +224,17 @@ STRICT RULES:
 def ask_gemini(user_message: str) -> str:
     try:
         model = genai.GenerativeModel(
-            model_name="gemini-pro",
+            model_name="gemini-2.0-flash",
             system_instruction=SYSTEM_PROMPT
         )
         response = model.generate_content(user_message)
         return response.text
     except Exception as e:
-        logger.error(f"Gemini error: {type(e).__name__}: {str(e)[:200]}")
-        return "⚠️ Sorry, I'm having trouble connecting right now. Please try again in a moment!"
+        logger.error(f"Gemini error TYPE: {type(e).__name__}")
+        logger.error(f"Gemini error FULL: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return f"Debug error: {type(e).__name__}: {str(e)[:200]}"
 
 
 # ──────────────────────────────────────────────
