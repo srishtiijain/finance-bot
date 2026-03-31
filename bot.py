@@ -13,7 +13,23 @@ import certifi
 import requests
 import google.generativeai as genai
 from dotenv import load_dotenv
+# --- KEEP ALIVE SERVER ---
+app = Flask('')
 
+@app.route('/')
+def home():
+    return "FinanceBot is running!"
+
+def run():
+    # Render automatically provides a PORT environment variable
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+keep_alive()
 # Fix SSL on Windows BEFORE importing telebot
 os.environ['REQUESTS_CA_BUNDLE'] = certifi.where()
 os.environ['SSL_CERT_FILE'] = certifi.where()
