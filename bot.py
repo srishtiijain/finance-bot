@@ -330,7 +330,7 @@ def handle_message(message):
     if remaining == 0:
         reply += f"\n\n_⚠️ This was your last free message for today. Your limit resets at midnight 🌙_"
 
-    bot.reply_to(message, reply, parse_mode="Markdown")
+    bot.reply_to(message, reply)
     logger.info(f"Replied [{user.first_name}] source=Gemini | used={count}/{DAILY_LIMIT}")
 
 
